@@ -1,0 +1,35 @@
+<% layout("layouts/boilerplates")%>
+    <div id="map" style="width:100%;height:500px"></div>
+    <% for (let campground of campgrounds) { %>
+        <div class="card" mb-3>
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="<%= campground.images.length>0?campground.images[0].url:'#'%>" alt="" class="img-fluid">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%=campground.title%>
+                        </h5>
+                        <p class="card-text">
+                            <%=campground.description%>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                <%=campground.location%>
+                            </small>
+                        </p>
+                        <a href="/campgrounds/<%=campground._id%>" class="btn btn-primary">View <%=campground.title%>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+            <script>
+                const accessToken = '<%=process.env.MAPBOX_TOKEN%>'
+                const geometry = '<%- JSON.stringify(campgrounds.map(f=> ({geometry:f.geometry, properties:{title:f.title, id:f._id, description:f.description}}))) %>'
+                const campgrounds = { features: JSON.parse(geometry) }
+                    //console.log(campgrounds)
+            </script>
+            <script src="/javascripts/indexPageMap.js"></script>
